@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let number = getRandomIntBelow8();
+      const colors = ["#f1f1ff", "#e9f3fc", "#fcf1ef", "#f4f0ff", "#ececef", "#e9f3fc", "#ecf4ee"];
+      function shuffle(arr) {
+        let i = arr.length;
+        while (i) {
+          let j = Math.floor(Math.random() * i--);
+          [arr[j], arr[i]] = [arr[i], arr[j]];
+          return arr;
+        }
+      }
+      console.log(shuffle(colors));
+    </script>
+  </body>
+</html>
