@@ -3,12 +3,22 @@
     <nav class="nav">
       <div class="name">zhangsan</div>
       <div class="pic">
-        <el-dropdown class="avatar-container" trigger="click">
-          <span style="color: #fff">2</span>
-          <el-dropdown-menu slot="dropdown" class="user-dropdown">
-            <el-dropdown-item @click.native="personalCenter">个人中心</el-dropdown-item>
+        <el-dropdown trigger="click">
+          <span class="avatar">
+            <img src="@/style/icons/avatar.png" />
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="personalCenter">
+              <div style="display: flex; align-items: center">
+                <img src="@/style/icons/id_card.png" style="height: 18px; padding-right: 10px" />
+                <span>{{ $t("customNav.personalCenter") }}</span>
+              </div>
+            </el-dropdown-item>
             <el-dropdown-item @click.native="loginOut">
-              <span>退出登录</span>
+              <div style="display: flex; align-items: center">
+                <img src="@/style/icons/logout.png" style="height: 18px; padding-right: 10px" />
+                <span>{{ $t("customNav.logOut") }}</span>
+              </div>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -28,7 +38,7 @@ export default {
     },
     loginOut() {
       this.$router.push({
-        path: "/",
+        path: "/login",
       });
     },
   },
@@ -42,6 +52,7 @@ export default {
   align-items: center;
   .name {
     margin-right: 10px;
+    color: #fff;
     cursor: pointer;
   }
 
@@ -49,13 +60,18 @@ export default {
     width: 36px;
     height: 36px;
     line-height: 36px;
-    background-color: salmon;
     border-radius: 50%;
     cursor: pointer;
+    .avatar {
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+      color: #fff;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
-}
-::v-deep .avatar-container .el-dropdown {
-  width: 26px;
-  height: 26px;
 }
 </style>

@@ -7,7 +7,6 @@
   </head>
   <body>
     <script>
-      let number = getRandomIntBelow8();
       const colors = ["#f1f1ff", "#e9f3fc", "#fcf1ef", "#f4f0ff", "#ececef", "#e9f3fc", "#ecf4ee"];
       function shuffle(arr) {
         let i = arr.length;
@@ -19,5 +18,15 @@
       }
       console.log(shuffle(colors));
     </script>
+
+    <!-- <script>
+      (function name() {
+        let r = Math.floor(Math.random() * 256);
+        let g = Math.floor(Math.random() * 256);
+        let b = Math.floor(Math.random() * 256);
+        console.log(r + "," + g + "," + b);
+        document.body.style.backgroundColor = "rgb(" + r + "," + g + "," + b + ")";
+      })();
+    </script> -->
   </body>
 </html>

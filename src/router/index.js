@@ -10,14 +10,14 @@ const routes = [
     component: () => import("../views/404.vue"),
   },
   {
-    path: "/HomeView",
-    name: "HomeView",
-    component: () => import("../views/HomeView.vue"),
+    path: "/login",
+    name: "login",
+    component: () => import("../views/login.vue"),
   },
   {
     path: "/",
-    name: "Login",
-    component: () => import("../views/login.vue"),
+    name: "layout",
+    component: () => import("../views/layout.vue"),
   },
   {
     path: "/personalCenter",

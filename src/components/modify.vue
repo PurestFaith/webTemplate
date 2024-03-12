@@ -1,17 +1,18 @@
 <template>
   <div class="modifyPage">
     <el-form :label-position="labelPosition" label-width="80px" class="form" :model="formLabelAlign">
-      <el-form-item label="当前密码">
+      <el-form-item :label="$t('modify.CurrentPassword')">
         <el-input v-model="formLabelAlign.name" size="small"></el-input>
       </el-form-item>
-      <el-form-item label="新密码">
+      <el-form-item :label="$t('modify.NewPassword')">
         <el-input v-model="formLabelAlign.region" size="small"></el-input>
       </el-form-item>
-      <el-form-item label="确认密码">
+      <el-form-item :label="$t('modify.ConfirmPassword')">
         <el-input v-model="formLabelAlign.type" size="small"></el-input>
       </el-form-item>
     </el-form>
-    <el-button type="success">保存密码</el-button><el-button style="margin-left: 30px; color: blue" type="text">重置密码</el-button>
+    <el-button type="success">{{ $t("modify.savePassword") }}</el-button
+    ><el-button style="margin-left: 30px; color: blue" type="text">{{ $t("modify.resetPassword") }}</el-button>
   </div>
 </template>
 

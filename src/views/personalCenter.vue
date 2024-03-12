@@ -1,20 +1,22 @@
 <template>
   <div class="personalCenterPage" :style="styleObject">
     <div class="left">
-      <el-page-header class="back" @back="$router.go(-1)" content="基本信息"> </el-page-header>
+      <el-page-header class="back" @back="$router.go(-1)" :content="$t('personalCenter.basicInformation')"> </el-page-header>
       <div class="pic">
         <div class="box">
-          <div class="top">2</div>
+          <div class="top">
+            <img src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif" alt="" srcset="" />
+          </div>
           <div class="bottom">张三</div>
         </div>
       </div>
       <div class="msg">
-        <div class="item" :class="[msg === '基本信息' ? 'active' : '']" @click="goBasicInformation"><i class="el-icon-info" /> 基本信息</div>
-        <div class="item" :class="[msg === '修改密码' ? 'active' : '']" @click="goModify_page"><i class="el-icon-s-help" /> 修改密码</div>
+        <div class="item" :class="[msg === '基本信息' ? 'active' : '']" @click="goBasicInformation"><i class="el-icon-info" /> {{ $t("personalCenter.basicInformation") }}</div>
+        <div class="item" :class="[msg === '修改密码' ? 'active' : '']" @click="goModify_page"><i class="el-icon-s-help" /> {{ $t("personalCenter.changePassword") }}</div>
       </div>
     </div>
     <div class="right">
-      <div class="title">{{ msg }}</div>
+      <div class="title">{{ msg === "修改密码" ? $t("personalCenter.changePassword") : $t("personalCenter.basicInformation") }}</div>
       <div class="content">
         <KeepAlive include="modify">
           <component :is="comName"></component>
@@ -25,8 +27,8 @@
 </template>
 
 <script>
-import basicInformation from "@/components/basicInformation.vue";
-import modify from "@/components/modify.vue";
+import basicInformation from "@/components/basicInformation.vue"; //基本信息
+import modify from "@/components/modify.vue"; //修改密码
 export default {
   name: "personalCenter",
   components: {
@@ -44,6 +46,7 @@ export default {
     };
   },
   created() {
+    console.log(process.env, "env");
     this.calcTableHeight();
   },
   mounted() {
@@ -103,6 +106,11 @@ export default {
           line-height: 86px;
           background-color: salmon;
           border-radius: 50%;
+          img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+          }
         }
         .bottom {
           margin-top: 30px;
@@ -149,7 +157,12 @@ export default {
           padding: 0 5px 0 25px;
         }
         &:hover {
-          background-color: #e3e3e3;
+          background-color: #f7f8fa;
+          border: 1px solid #ccc;
+          border-left: none;
+          border-top: none;
+          border-right: none;
+          box-sizing: border-box;
         }
       }
       .item:last-child {
@@ -164,7 +177,12 @@ export default {
           padding: 0 5px 0 25px;
         }
         &:hover {
-          background-color: #e3e3e3;
+          background-color: #f7f8fa;
+          border: 1px solid #ccc;
+          border-left: none;
+          border-top: none;
+          border-right: none;
+          box-sizing: border-box;
         }
       }
     }
@@ -179,6 +197,8 @@ export default {
     border-style: solid;
     border-color: rgba(215, 215, 215, 1);
     border-radius: 8px;
+    overflow: auto;
+
     .title {
       height: 87.5px;
       line-height: 87.5px;
@@ -186,10 +206,31 @@ export default {
       padding-left: 30px;
       border-bottom: 1px solid #ccc;
       font-size: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 88;
+      background-color: #fff;
     }
     .content {
       padding: 20px;
     }
+  }
+  ::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+    background-color: #f5f5f5;
+  }
+  /*定义滚动条轨道 内阴影+圆角*/
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #f5f5f5;
+  }
+  /*定义滑块 内阴影+圆角*/
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #a5a5a583;
   }
 }
 </style>

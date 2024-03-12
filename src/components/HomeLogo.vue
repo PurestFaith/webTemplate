@@ -7,15 +7,6 @@
 <script>
 export default {
   name: "HomeLogo",
-  components: {},
-  props: {},
-  data() {
-    return {};
-  },
-  computed: {},
-  watch: {},
-  created() {},
-  methods: {},
 };
 </script>
 

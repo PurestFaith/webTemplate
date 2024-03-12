@@ -5,28 +5,32 @@
         <img src="@/assets/common/logo.png" alt="" srcset="" />
       </div>
       <div class="tip">
-        <div class="login">登录</div>
-        <div class="method">使用你的工号</div>
+        <div class="login">{{ $t("login.login") }}</div>
+        <div class="method">{{ $t("login.tips") }}</div>
       </div>
       <div class="form">
         <el-form :model="loginForm" status-icon>
           <el-form-item prop="pass">
-            <el-input class="input" v-model="loginForm.username" placeholder="请输入工号">
-              <i slot="prefix" class="el-icon-user"></i>
+            <el-input v-model="loginForm.username" placeholder="请输入工号">
+              <span slot="prefix">
+                <img src="@/style/icons/photo.png" style="width: 20px" />
+              </span>
             </el-input>
           </el-form-item>
           <el-form-item prop="checkPass">
-            <el-input class="input" v-model="loginForm.password" placeholder="请输入密码" type="password" autocomplete="off">
-              <i slot="prefix" class="el-icon-lock"></i>
+            <el-input v-model="loginForm.password" placeholder="请输入密码" type="password" autocomplete="off">
+              <span slot="prefix">
+                <img src="@/style/icons/lock.png" style="width: 25px" />
+              </span>
             </el-input>
           </el-form-item>
           <div style="padding: 5px 0; display: flex; justify-content: start">
-            <el-checkbox v-model="checked">记住我</el-checkbox>
+            <el-checkbox v-model="checked">{{ $t("login.remember") }}</el-checkbox>
           </div>
         </el-form>
       </div>
       <div class="btn">
-        <el-button @click="handleLogin" type="success">登录</el-button>
+        <el-button @click="handleLogin" type="success">{{ $t("login.btn") }}</el-button>
       </div>
     </div>
   </div>
@@ -34,7 +38,7 @@
 
 <script>
 export default {
-  name: "Login",
+  name: "login",
   data() {
     return {
       loginForm: {
@@ -84,7 +88,7 @@ export default {
         localStorage.removeItem("password");
       }
       this.$router.push({
-        name: "HomeView",
+        name: "layout",
       });
     },
   },
@@ -128,14 +132,6 @@ export default {
         font-weight: 400;
         font-style: normal;
       }
-      .form {
-        .icon {
-          width: 20px;
-          height: 24px;
-          line-height: 24px;
-          background-color: red;
-        }
-      }
 
       .method {
         margin-top: 20px;
@@ -164,9 +160,9 @@ export default {
 
 ::v-deep .el-input__prefix {
   left: 12px;
-  line-height: 54px;
+  line-height: 60px;
 }
-// cover some element-ui styles
+
 /* 所有primaty按钮颜色 */
 .el-button--success {
   width: 140px;

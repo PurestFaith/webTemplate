@@ -12,7 +12,7 @@
               <path d="M7.667 12.667A5.333 5.333 0 107.667 2a5.333 5.333 0 000 10.667zM14.334 14l-2.9-2.9" stroke="currentColor" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
           </button>
-          <input v-model="input" @change="getValue" class="input" placeholder="输入拼音首字母/名字，搜索应用" required="" type="text" />
+          <input v-model="input" @blur="keydown" @keydown.enter="keydown" class="input" :placeholder="$t('layout.placeholder')" required="" type="text" />
         </form>
       </div>
       <div class="list">
@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: "HomeView",
+  name: "layout",
   components: {},
   props: {},
   data() {
@@ -45,7 +45,13 @@ export default {
     };
   },
   methods: {
+    keydown(e) {
+      e.preventDefault();
+      if (!e.target.value) return;
+      console.log(e.target.value);
+    },
     getValue(e) {
+      e.stopPropagation();
       console.log(e.target.value);
     },
     calcTableHeight() {
@@ -67,13 +73,7 @@ export default {
   .logo {
     margin-top: 30px;
   }
-  .search {
-    .input {
-      margin: 70px 0;
-    }
-  }
 }
-
 ::v-deep .el-input__inner {
   width: 610px;
   height: 55px;
@@ -118,6 +118,8 @@ export default {
     border: none;
     background: none;
     color: #8b8ba7;
+    padding-left: 19px;
+    transform: scale(1.5);
   }
   .input {
     font-size: 16px;

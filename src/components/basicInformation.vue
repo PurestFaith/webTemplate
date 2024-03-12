@@ -2,39 +2,39 @@
   <div class="basicInformationPage">
     <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign" class="form">
       <div class="left">
-        <el-form-item label="工号">
+        <el-form-item :label="$t('basicInformation.JobNumber')">
           <el-input v-model="formLabelAlign.prono" size="small" disabled></el-input>
         </el-form-item>
-        <el-form-item label="性别">
+        <el-form-item :label="$t('basicInformation.gender')">
           <el-input v-model="formLabelAlign.sex" size="small" disabled></el-input>
         </el-form-item>
-        <el-form-item label="部门">
+        <el-form-item :label="$t('basicInformation.department')">
           <el-input v-model="formLabelAlign.department" size="small" disabled></el-input>
         </el-form-item>
-        <el-form-item label="职务">
+        <el-form-item :label="$t('basicInformation.Position')">
           <el-input v-model="formLabelAlign.post" size="small" disabled></el-input>
         </el-form-item>
-        <el-form-item label="移动电话">
+        <el-form-item :label="$t('basicInformation.mobile')">
           <el-input v-model="formLabelAlign.phone" size="small" disabled></el-input>
         </el-form-item>
-        <el-form-item label="注册时间">
+        <el-form-item :label="$t('basicInformation.RegistrationTime')">
           <el-input v-model="formLabelAlign.timer" size="small" disabled></el-input>
         </el-form-item>
       </div>
       <div class="right">
-        <el-form-item label="姓名">
+        <el-form-item :label="$t('basicInformation.name')">
           <el-input v-model="formLabelAlign.name" size="small" disabled></el-input>
         </el-form-item>
-        <el-form-item label="所属中心">
+        <el-form-item :label="$t('basicInformation.AffiliatedCenter')">
           <el-input v-model="formLabelAlign.center" size="small" disabled></el-input>
         </el-form-item>
-        <el-form-item label="岗位">
+        <el-form-item :label="$t('basicInformation.post')">
           <el-input v-model="formLabelAlign.professionalPositions" size="small" disabled></el-input>
         </el-form-item>
-        <el-form-item label="办公地点">
+        <el-form-item :label="$t('basicInformation.OfficeLocation')">
           <el-input v-model="formLabelAlign.address" size="small" disabled></el-input>
         </el-form-item>
-        <el-form-item label="电子邮件">
+        <el-form-item :label="$t('basicInformation.E_mail')">
           <el-input v-model="formLabelAlign.mail" size="small" disabled></el-input>
         </el-form-item>
       </div>
@@ -94,5 +94,9 @@ export default {
 ::v-deep .el-input.is-disabled .el-input__inner {
   color: black;
   background-color: rgba(242, 242, 242, 1);
+}
+
+::v-deep .el-input {
+  pointer-events: none;
 }
 </style>
