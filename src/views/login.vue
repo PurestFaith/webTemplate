@@ -13,14 +13,14 @@
           <el-form-item prop="username">
             <el-input v-model="loginForm.username" placeholder="请输入工号">
               <span slot="prefix">
-                <img src="@/style/icons/photo.png" style="width: 20px" />
+                <img src="@/style/icons/photo.png" />
               </span>
             </el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input v-model="loginForm.password" placeholder="请输入密码" type="password" autocomplete="off">
               <span slot="prefix">
-                <img src="@/style/icons/lock.png" style="width: 25px" />
+                <img src="@/style/icons/lock.png" />
               </span>
             </el-input>
           </el-form-item>
@@ -159,8 +159,14 @@ export default {
     }
     .form {
       img {
-        // width: 20px;
-        // height: 20px;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+      }
+      ::v-deep .el-input__prefix {
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   }
@@ -171,18 +177,6 @@ export default {
   box-sizing: border-box;
   border-width: 1px;
   border-style: solid;
-}
-::v-deep .el-input--prefix .el-input__inner {
-  padding-left: 54px;
-}
-
-::v-deep .el-form-item:nth-child(2) {
-  margin-bottom: 10px;
-}
-
-::v-deep .el-input__prefix {
-  left: 12px;
-  line-height: 60px;
 }
 
 /* 所有primaty按钮颜色 */
@@ -201,5 +195,9 @@ export default {
 .el-button--primary.is-disabled {
   background-color: #ddd !important;
   border-color: #ddd !important;
+}
+
+::v-deep .el-form-item__content {
+  line-height: 0;
 }
 </style>
