@@ -4,6 +4,7 @@ import HomeLogo from "@/components/HomeLogo.vue";
 import basicInformation from "@/components/basicInformation.vue";
 import modify from "@/components/modify.vue";
 import demo from "@/components/demo.vue";
+import Panel from "@/components/panel.vue";
 
 export default {
   install(Vue, option) {
@@ -13,5 +14,6 @@ export default {
     Vue.component("basicInformation", basicInformation); //基本信息
     Vue.component("modify", modify); //修改密码
     Vue.component("demo", demo);
+    Vue.component("Panel", Panel);
   },
 };

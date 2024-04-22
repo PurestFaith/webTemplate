@@ -30,7 +30,17 @@ const routes = [
     component: () => import("@/components/modify.vue"),
   },
   {
-    path: "/demo",
+    path: "/failureStatisticsReport",
+    name: "failureStatisticsReport",
+    component: () => import("@/components/failureStatisticsReport.vue"),
+  },
+  {
+    path: "/sx_system/:id?",
+    name: "sx_system",
+    component: () => import("@/views/sx_system.vue"),
+  },
+  {
+    path: "/demo/:id?",
     name: "demo",
     component: () => import("@/components/demo.vue"),
   },

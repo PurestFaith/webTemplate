@@ -6,3 +6,17 @@ export const get_UserInfo = (params) => {
     params,
   });
 };
+
+/**
+ *
+ * @param username
+ * @param password
+ * @returns {never}
+ */
+export const login = (data) => {
+  return request({
+    url: "admin/Login/index",
+    method: "post",
+    data,
+  });
+};

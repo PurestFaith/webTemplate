@@ -3,27 +3,27 @@
     <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign" class="form">
       <div class="left">
         <el-form-item :label="$t('basicInformation.JobNumber')">
-          <el-input v-model="formLabelAlign.prono" size="small" disabled></el-input>
+          <el-input v-model="formLabelAlign.perno" size="small" disabled></el-input>
         </el-form-item>
         <el-form-item :label="$t('basicInformation.gender')">
-          <el-input v-model="formLabelAlign.sex" size="small" disabled></el-input>
+          <el-input v-model="forMapSex" size="small" disabled></el-input>
         </el-form-item>
         <el-form-item :label="$t('basicInformation.department')">
-          <el-input v-model="formLabelAlign.department" size="small" disabled></el-input>
+          <el-input v-model="formLabelAlign.groupname" size="small" disabled></el-input>
         </el-form-item>
         <el-form-item :label="$t('basicInformation.Position')">
           <el-input v-model="formLabelAlign.post" size="small" disabled></el-input>
         </el-form-item>
         <el-form-item :label="$t('basicInformation.mobile')">
-          <el-input v-model="formLabelAlign.phone" size="small" disabled></el-input>
+          <el-input v-model="formLabelAlign.tel" size="small" disabled></el-input>
         </el-form-item>
         <el-form-item :label="$t('basicInformation.RegistrationTime')">
-          <el-input v-model="formLabelAlign.timer" size="small" disabled></el-input>
+          <el-input v-model="formLabelAlign.start_date" size="small" disabled></el-input>
         </el-form-item>
       </div>
       <div class="right">
         <el-form-item :label="$t('basicInformation.name')">
-          <el-input v-model="formLabelAlign.name" size="small" disabled></el-input>
+          <el-input v-model="formLabelAlign.pername" size="small" disabled></el-input>
         </el-form-item>
         <el-form-item :label="$t('basicInformation.AffiliatedCenter')">
           <el-input v-model="formLabelAlign.center" size="small" disabled></el-input>
@@ -43,33 +43,48 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "basicInformation",
-  components: {},
-  props: {},
   data() {
     return {
+      perno: "23032502",
       labelPosition: "top",
       formLabelAlign: {
-        prono: "20230212003",
-        name: "张三",
-        sex: "男",
-        department: "技术二部",
-        post: "技术员",
-        phone: "13800138000",
-        timer: "2023-11-12",
+        perno: "",
+        pername: "",
+        sex: "",
+        groupname: "",
+        post: "",
+        tel: "",
+        start_date: "",
         region: "",
-        center: "技术中心",
-        professionalPositions: "技术员",
-        address: "杭州",
-        mail: "www.213.com",
+        center: "",
+        professionalPositions: "",
+        address: "",
+        mail: "",
       },
     };
   },
-  computed: {},
-  watch: {},
-  created() {},
-  methods: {},
+  computed: {
+    forMapSex() {
+      return this.formLabelAlign.sex === "0" ? "男" : "女";
+    },
+  },
+
+  created() {
+    this.get_employee_info();
+  },
+  methods: {
+    async get_employee_info() {
+      axios({
+        url: "http://192.168.1.148:9095/app/index.php/Admin/common/get_employee_info",
+        params: { perno: this.perno },
+      }).then((res) => {
+        this.formLabelAlign = { ...res.data };
+      });
+    },
+  },
 };
 </script>
 

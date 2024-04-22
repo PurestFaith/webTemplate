@@ -1,32 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      const colors = ["#f1f1ff", "#e9f3fc", "#fcf1ef", "#f4f0ff", "#ececef", "#e9f3fc", "#ecf4ee"];
-      function shuffle(arr) {
-        let i = arr.length;
-        while (i) {
-          let j = Math.floor(Math.random() * i--);
-          [arr[j], arr[i]] = [arr[i], arr[j]];
-          return arr;
-        }
-      }
-      console.log(shuffle(colors));
-    </script>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-    <!-- <script>
-      (function name() {
-        let r = Math.floor(Math.random() * 256);
-        let g = Math.floor(Math.random() * 256);
-        let b = Math.floor(Math.random() * 256);
-        console.log(r + "," + g + "," + b);
-        document.body.style.backgroundColor = "rgb(" + r + "," + g + "," + b + ")";
-      })();
-    </script> -->
-  </body>
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<style type="text/css">
+
+body{text-align: center;}
+
+#container {width:888px; position:relative; margin-right: auto; margin-left: auto; }
+
+
+#artcon{width:888px; position:relative; margin-right: auto; margin-left: auto;}
+#articleCon{
+position:absolute;
+background: #fff;
+top:30px;
+left:0px;
+z-index:3;
+height:300px;
+width: 888px;
+border: 1px solid;
+border-color: #aaa;
+display:none;
+margin:0px 0px 0px 0px;
+}
+
+</style>
+
+</head>
+
+<body bgcolor="#eeeeee">
+<script type="text/javascript">
+
+var POP_LOCK = "unlock";
+var $focus_area = "";
+var $last_focus = "";
+
+
+function hideMenu(){
+
+var container = document.getElementById("container");
+
+container.style.opacity = "0.3";
+}
+
+function uhideMenu(){
+
+var container = document.getElementById("container");
+container.style.opacity = "1";
+}
+
+function show_article(obj){
+hideMenu();
+POP_LOCK = "lock";
+document.getElementById("articleCon").style.display="block";
+
+}
+
+function unshow_article(obj){
+//alert("we are in articlePopdown");
+uhideMenu();
+
+document.getElementById("articleCon").style.display="none";
+
+POP_LOCK = "unlock";
+}
+
+</script>
+
+
+<div id="container" >
+
+<div οnclick="show_article(this)"> Click me to show the details </div>
+
+
+</div>
+</div>
+
+
+<div id="artcon">
+<div id="articleCon" >
+
+<div style="align:right; margin-right: 10px; border: 1px;" align="right" onClick="unshow_article(this)">
+Click me to hide me!
+</div>
+
+
+<hr width="850px" align="center" style="height:1px;border:0;border-bottom:1px solid #aaa;">
+
+</div>
+</div>
+
+
+</body>
+
 </html>

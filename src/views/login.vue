@@ -9,15 +9,15 @@
         <div class="method">{{ $t("login.tips") }}</div>
       </div>
       <div class="form">
-        <el-form :model="loginForm" status-icon>
-          <el-form-item prop="pass">
+        <el-form :model="loginForm" ref="loginForm" :rules="loginRules" status-icon>
+          <el-form-item prop="username">
             <el-input v-model="loginForm.username" placeholder="请输入工号">
               <span slot="prefix">
                 <img src="@/style/icons/photo.png" style="width: 20px" />
               </span>
             </el-input>
           </el-form-item>
-          <el-form-item prop="checkPass">
+          <el-form-item prop="password">
             <el-input v-model="loginForm.password" placeholder="请输入密码" type="password" autocomplete="off">
               <span slot="prefix">
                 <img src="@/style/icons/lock.png" style="width: 25px" />
@@ -30,30 +30,41 @@
         </el-form>
       </div>
       <div class="btn">
-        <el-button @click="handleLogin" type="success">{{ $t("login.btn") }}</el-button>
+        <el-button @click="login" type="success">{{ $t("login.btn") }}</el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "login",
   data() {
+    const validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入您的工号"));
+      }
+      callback();
+    };
+    const validatePassCheck = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入您的密码"));
+      } else {
+        callback();
+      }
+    };
     return {
       loginForm: {
         username: "",
         password: "",
       },
-      checked: false,
-      appid: "1",
       loginRules: {
-        // username: [{ required: true, trigger: "blur", validator: validateUsername }],
-        // password: [{ required: true, trigger: "blur", validator: validatePassword }],
+        username: [{ required: true, trigger: "blur", validator: validatePass }],
+        password: [{ required: true, trigger: "blur", validator: validatePassCheck }],
       },
+      checked: false,
       loading: false,
-      passwordType: "password",
-      redirect: undefined,
     };
   },
 
@@ -67,28 +78,33 @@ export default {
   },
 
   methods: {
-    showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
-      } else {
-        this.passwordType = "password";
-      }
-      this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
-    },
-    handleLogin() {
-      this.loading = true;
-      if (this.checked) {
-        let password = window.btoa(this.loginForm.password); // 加密
-        localStorage.setItem("username", this.loginForm.username);
-        localStorage.setItem("password", password);
-      } else {
-        localStorage.removeItem("username");
-        localStorage.removeItem("password");
-      }
-      this.$router.push({
-        name: "layout",
+    ...mapActions(["handleLogin"]),
+
+    login() {
+      const that = this;
+      that.$refs.loginForm.validate((valid) => {
+        if (valid) {
+          that.loading = true;
+          if (that.checked) {
+            let password = window.btoa(that.loginForm.password); // 加密
+            localStorage.setItem("username", that.loginForm.username);
+            localStorage.setItem("password", password);
+          } else {
+            localStorage.removeItem("username");
+            localStorage.removeItem("password");
+          }
+          that
+            .handleLogin(that.loginForm)
+            .then(() => {
+              that.$router.push({
+                path: "/",
+              });
+              that.loading = false;
+            })
+            .catch(() => {
+              that.loading = false;
+            });
+        }
       });
     },
   },
@@ -139,6 +155,12 @@ export default {
         font-weight: 400;
         font-style: normal;
         font-size: 16px;
+      }
+    }
+    .form {
+      img {
+        // width: 20px;
+        // height: 20px;
       }
     }
   }

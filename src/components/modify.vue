@@ -1,40 +1,89 @@
 <template>
   <div class="modifyPage">
-    <el-form :label-position="labelPosition" label-width="80px" class="form" :model="formLabelAlign">
-      <el-form-item :label="$t('modify.CurrentPassword')">
-        <el-input v-model="formLabelAlign.name" size="small"></el-input>
+    <el-form class="form" ref="formLabelAlign" :rules="ruleCustom" :model="formLabelAlign" label-position="top" label-width="80px">
+      <el-form-item :label="$t('modify.CurrentPassword')" prop="oldPassword">
+        <el-input v-model="formLabelAlign.oldPassword" size="small"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('modify.NewPassword')">
-        <el-input v-model="formLabelAlign.region" size="small"></el-input>
+      <el-form-item :label="$t('modify.NewPassword')" prop="password">
+        <el-input v-model="formLabelAlign.password" size="small"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('modify.ConfirmPassword')">
-        <el-input v-model="formLabelAlign.type" size="small"></el-input>
+      <el-form-item :label="$t('modify.ConfirmPassword')" prop="confirm_password">
+        <el-input v-model="formLabelAlign.confirm_password" size="small"></el-input>
       </el-form-item>
     </el-form>
-    <el-button type="success">{{ $t("modify.savePassword") }}</el-button
-    ><el-button style="margin-left: 30px; color: blue" type="text">{{ $t("modify.resetPassword") }}</el-button>
+    <el-button @click="savePassword" type="success">{{ $t("modify.savePassword") }}</el-button
+    ><el-button @click="handleReset('formLabelAlign')" style="margin-left: 30px; color: blue" type="text">{{ $t("modify.resetPassword") }}</el-button>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { own } from "@/api/modify.js";
 export default {
   name: "modify",
-  components: {},
-  props: {},
   data() {
+    const validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入您的当前密码"));
+      } else {
+        callback();
+      }
+    };
+    const validatePassCheck = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入您的新密码"));
+      } else {
+        callback();
+      }
+    };
+
+    const validatePassword = (rule, value, callback) => {
+      if (value !== this.formLabelAlign.password) {
+        callback(new Error("与新密码不一致"));
+      } else {
+        callback();
+      }
+    };
+
     return {
-      labelPosition: "top",
       formLabelAlign: {
-        name: "",
-        region: "",
-        type: "",
+        oldPassword: "",
+        password: "",
+        confirm_password: "",
+      },
+      ruleCustom: {
+        oldPassword: [{ validator: validatePass, trigger: "blur" }],
+        password: [{ validator: validatePassCheck, trigger: "blur" }],
+        confirm_password: [{ validator: validatePassword, trigger: "blur" }],
       },
     };
   },
-  computed: {},
-  watch: {},
-  created() {},
-  methods: {},
+  computed: {
+    // 后续在Getters里面集中取用户信息
+    ...mapGetters(["username"]),
+  },
+
+  methods: {
+    async savePassword() {
+      const vm = this;
+      vm.$refs.formLabelAlign.validate(async (valid) => {
+        if (valid) {
+          const { status, data } = await own({
+            oldPassword: vm.formLabelAlign.oldPassword,
+            password: vm.formLabelAlign.password,
+          });
+          if (status === 200) {
+            vm.$message.success(data.msg);
+          } else {
+            vm.$message.error(data.msg);
+          }
+        }
+      });
+    },
+    handleReset(name) {
+      this.$refs[name].resetFields();
+    },
+  },
 };
 </script>
 

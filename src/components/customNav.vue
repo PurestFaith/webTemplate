@@ -1,7 +1,8 @@
 <template>
   <div class="HomeViewPage">
     <nav class="nav">
-      <div class="name">zhangsan</div>
+      <div class="timer">{{ timer }}</div>
+      <div class="name">{{ username }}</div>
       <div class="pic">
         <el-dropdown trigger="click">
           <span class="avatar">
@@ -28,15 +29,46 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+import dayjs from "dayjs";
+import localeZhCn from "dayjs/locale/zh-cn";
+// 设置dayjs的中文语言环境
+dayjs.locale(localeZhCn);
+
+var timeHandle = null;
 export default {
   name: "customNav",
+  data() {
+    return {
+      timer: null,
+    };
+  },
+  mounted() {
+    timeHandle = setInterval(() => {
+      this.timer = dayjs().format("YYYY/MM/DD dddd HH:mm");
+    }, 1000);
+  },
+
+  destroyed() {
+    if (timeHandle) {
+      // 调用之前，先清理，防止一直生成对象
+      clearInterval(timeHandle);
+      timeHandle = null;
+    }
+  },
+  computed: {
+    ...mapGetters(["username"]),
+  },
+
   methods: {
+    ...mapActions(["handleLogOut"]),
     personalCenter() {
       this.$router.push({
         path: "/personalCenter",
       });
     },
     loginOut() {
+      this.handleLogOut();
       this.$router.push({
         path: "/login",
       });
@@ -48,12 +80,13 @@ export default {
 .nav {
   display: flex;
   justify-content: end;
-  background-color: #e10221;
+  // background-color: #e10221;
   align-items: center;
-  .name {
-    margin-right: 10px;
-    color: #fff;
+  .name,
+  .timer {
+    margin: 0 20px;
     cursor: pointer;
+    font-size: 16px;
   }
 
   .pic {
