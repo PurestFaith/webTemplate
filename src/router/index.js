@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-
 Vue.use(VueRouter);
 
 const routes = [
@@ -19,6 +18,7 @@ const routes = [
     name: "layout",
     component: () => import("../views/layout.vue"),
   },
+
   {
     path: "/personalCenter",
     name: "personalCenter",
@@ -39,6 +39,17 @@ const routes = [
     name: "sx_system",
     component: () => import("@/views/sx_system.vue"),
   },
+  {
+    path: "/qualityManagementReport",
+    name: "qualityManagementReport",
+    component: () => import("@/components/qualityManagementReport.vue"),
+  },
+  {
+    path: "/settlementVoucher",
+    name: "settlementVoucher",
+    component: () => import("@/components/settlementVoucher.vue"),
+  },
+
   {
     path: "/demo/:id?",
     name: "demo",

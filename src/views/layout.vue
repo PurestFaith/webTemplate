@@ -5,13 +5,7 @@
       <div class="logo">
         <HomeLogo />
       </div>
-      <div class="search">
-        <el-input v-model="input" placeholder="输入拼音首字母/名字，搜索应用" class="input">
-          <span slot="prefix">
-            <img src="@/assets/common/fangdajing.png" />
-          </span>
-        </el-input>
-      </div>
+
       <div class="list">
         <systemList @showmaskingFlag="showmaskingFlag" ref="systemList" />
       </div>

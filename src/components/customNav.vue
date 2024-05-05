@@ -10,14 +10,14 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="personalCenter">
-              <div style="display: flex; align-items: center">
-                <img src="@/style/icons/id_card.png" style="height: 18px; padding-right: 10px" />
+              <div class="icons">
+                <img src="@/style/icons/id_card.png" />
                 <span>{{ $t("customNav.personalCenter") }}</span>
               </div>
             </el-dropdown-item>
             <el-dropdown-item @click.native="loginOut">
-              <div style="display: flex; align-items: center">
-                <img src="@/style/icons/logout.png" style="height: 18px; padding-right: 10px" />
+              <div class="icons">
+                <img src="@/style/icons/logout.png" />
                 <span>{{ $t("customNav.logOut") }}</span>
               </div>
             </el-dropdown-item>
@@ -45,8 +45,8 @@ export default {
   },
   mounted() {
     timeHandle = setInterval(() => {
-      this.timer = dayjs().format("YYYY/MM/DD dddd HH:mm");
-    }, 1000);
+      this.timer = dayjs().format("YYYY/MM/DD dddd HH:mm:ss");
+    }, 0);
   },
 
   destroyed() {
@@ -61,7 +61,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["handleLogOut"]),
+    ...mapActions("user", ["handleLogOut"]),
     personalCenter() {
       this.$router.push({
         path: "/personalCenter",
@@ -88,7 +88,6 @@ export default {
     cursor: pointer;
     font-size: 16px;
   }
-
   .pic {
     width: 36px;
     height: 36px;
@@ -105,6 +104,15 @@ export default {
         height: 100%;
       }
     }
+  }
+}
+::v-deep.el-dropdown-menu.el-popper .el-dropdown-menu__item .icons {
+  display: flex;
+  align-items: center;
+  img {
+    width: 20px;
+    height: 18px;
+    padding-right: 3px;
   }
 }
 </style>

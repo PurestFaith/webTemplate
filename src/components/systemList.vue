@@ -1,14 +1,21 @@
 <template>
   <div class="systemListPage">
+    <div class="search">
+      <el-input v-model="paramsData.keywords" @input="searchList" placeholder="输入拼音首字母/名字，搜索应用" clearable class="input">
+        <span slot="prefix">
+          <img src="@/assets/common/fangdajing.png" />
+        </span>
+      </el-input>
+    </div>
     <transition-group class="container" name="flip-list" tag="ul">
       <div class="systemList" :ref="'lists' + key" draggable="true" :key="item.app_id" v-for="(item, key) in list" @click.stop="goSystem(item, key)" @dragstart="dragstart(item)" @dragover="dragover(item)" @dragend="dragend(item)">
-        <div :class="attribute.length > 0 && activeIndex == key ? 'item' : 'otheritem'">
+        <div :class="attribute.length > 0 && activeIndex == key ? 'item' : 'otheritem'" :style="{ backgroundColor: JSON.parse(item.app_api_show).style.bgc }">
           <span> {{ item.app_name }}</span>
           <!-- 上遮罩 -->
           <div class="topItem">
             <div class="attr-list" v-if="attribute.length > 0 && activeIndex == key">
-              <div class="attr-item" v-for="(item, index) in attribute" :key="item.id">
-                <div class="number" :class="{ active: ActiveClass == index }" @click="handleClickAttrib(item, index)">{{ Number(item.keyFunc) }}</div>
+              <div class="attr-item" v-for="item in attribute" :key="item.id">
+                <div class="number" @click.stop="handleClickAttrib(item)">{{ Number(item.keyFunc) }}</div>
                 <div class="title">{{ item.valueFunc }}</div>
               </div>
             </div>
@@ -36,51 +43,60 @@
 
 <script>
 import { getApplyProperty, getApplicationList, getByApp } from "@/api/applicationList.js";
+import { mapMutations, mapGetters } from "vuex";
+import { appPersonal } from "@/api/applicationList";
 export default {
   name: "systemList",
   data() {
     return {
-      ActiveClass: 0,
       list: [],
       draggingItem: null,
       lastItem: null,
-      items: [],
-      flag: false,
-      resp: null,
+      appId: "",
       attributeParameter: {
-        appId: "",
         funcld: "",
       },
       attribute: [],
       func: [],
       activeIndex: null,
-      defaultWorkshop: [],
+      paramsData: {
+        page: 1,
+        size: 10,
+        keywords: "",
+        type: "2",
+      },
+      personal_app: [],
     };
   },
 
   created() {
     this.getApplicationList();
   },
+  computed: {
+    ...mapGetters(["token"]),
+  },
 
   methods: {
-    handleClickAttrib(item, index) {
-      console.log("属性-->", item);
-      this.defaultWorkshop = item.keyFunc;
-      this.ActiveClass = index; //默认选中‘首页’
+    searchList(val) {
+      this.paramsData.keywords = val;
+      this.getApplicationList();
     },
+    ...mapMutations("sx_system", ["setTreeData"]),
     // 列表
     async getApplicationList() {
       const {
         data: { data },
-      } = await getApplicationList({ page: 1, size: 10 });
-      this.list = data.list;
+      } = await getApplicationList(this.paramsData);
+      const arr = data.list.sort((a, b) => a.sort - b.sort);
+      this.list = arr;
     },
+
     //属性
     async getApplyProperty() {
       const { data } = await getApplyProperty(this.attributeParameter);
       this.attribute = data.data;
-      return data.data;
     },
+
     // 功能
     async getByApp() {
       const {
@@ -90,30 +106,38 @@ export default {
     },
 
     async goSystem(item, key) {
+      if (item.app_api) {
+        this.setTreeData(JSON.parse(item.app_api));
+      }
       this.attributeParameter.appId = item.id;
-      await this.getByApp();
-      const resp = await this.getApplyProperty();
-      if (resp.length > 0) {
-        this.$emit("showmaskingFlag");
+      this.getByApp();
+      this.getApplyProperty();
+      // app_type 1 弹出遮罩 2直接跳转
+      if (item.app_type === 1) {
         this.activeIndex = key;
+        this.$emit("showmaskingFlag");
+      } else {
+        window.open(`${JSON.parse(item.app_api_show).url}?Api-Auth=${this.token}`);
       }
-    },
-    handleClickFunc(item) {
-      if (!this.defaultWorkshop) {
-        this.defaultWorkshop = this.attribute[0].keyFunc;
-      }
-      console.log("this.defaultWorkshop-->", this.defaultWorkshop);
-      this.$router.push({
-        path: `/sx_system/${this.defaultWorkshop}`,
-      });
-      // window.open(`${item.funcUrl}?${Number(this.defaultWorkshop)}`);
     },
 
-    // 1. 拖拽开始
+    // 选择属性
+    handleClickAttrib(item) {
+      this.$router.push({
+        path: `${item.attrUrl}${item.keyFunc}`,
+      });
+    },
+
+    // 选择功能
+    handleClickFunc(item) {
+      this.$router.push({
+        path: `${item.funcUrl}`,
+      });
+    },
+
     dragstart(item) {
       this.draggingItem = item;
     },
-
     // 2. 拖动经过触发多次
     dragover(item) {
       // 1.&& this.lastItem !== item 不和自己交换位置
@@ -128,8 +152,20 @@ export default {
       this.lastItem = item; //1.记录最后的位置
     },
 
-    // 3. 松开时触发一次
-    dragend(item) {},
+    //记录排序位置
+    async dragend() {
+      const result = this.list.map((item, index) => ({
+        id: item.id,
+        app_id: item.app_id,
+        sort: index + 1,
+      }));
+      const {
+        data: { code },
+      } = await appPersonal({ personal_app: JSON.stringify(result) });
+      if (code === 1) {
+        this.getApplicationList();
+      }
+    },
   },
 };
 </script>
@@ -139,8 +175,34 @@ export default {
   position: relative;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  flex-direction: column;
   max-width: 1200px;
+  .search {
+    margin: 100px 0 30px 0;
+    .input {
+      font-size: 16px;
+      background-color: transparent;
+      width: 610px;
+      border-radius: 15px;
+      border: #ccc;
+      &:focus {
+        outline: none;
+      }
 
+      img {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+      }
+    }
+    ::v-deep .el-input__prefix {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 10px;
+    }
+  }
   .container {
     display: flex;
     flex-wrap: wrap;
@@ -185,6 +247,7 @@ export default {
       position: relative;
       padding: 0 20px;
       height: 80px;
+      // width: 37px;
       text-align: center;
       line-height: 80px;
       background-color: #fcf1ef;
@@ -192,7 +255,7 @@ export default {
       font-family: "Arial Normal", "Arial", sans-serif;
       font-weight: 400;
       font-style: normal;
-      font-size: 24px;
+      font-size: 18px;
       z-index: 100;
       &:nth-child(2) {
         width: 80px;
@@ -210,7 +273,7 @@ export default {
         // overflow-x: scroll;
         // max-width: 400px;
         top: -103px;
-        left: 103px;
+        left: 88px;
         padding: 10px;
         height: 70px;
         border-radius: 15px;
@@ -219,6 +282,7 @@ export default {
         -webkit-box-shadow: 8px 9px 21px 0px rgba(62, 66, 66, 0.1);
         -moz-box-shadow: 8px 9px 21px 0px rgba(62, 66, 66, 0.1);
         box-shadow: 8px 9px 21px 0px rgba(62, 66, 66, 0.1);
+
         .attr-list {
           display: flex;
           justify-content: space-around;
@@ -257,13 +321,14 @@ export default {
       .bottomItem {
         position: absolute;
         top: 1px;
-        left: 103px;
+        left: 88px;
         border-radius: 15px;
         z-index: 6;
         background-color: #fff;
         -webkit-box-shadow: 8px 9px 21px 0px rgba(62, 66, 66, 0.1);
         -moz-box-shadow: 8px 9px 21px 0px rgba(62, 66, 66, 0.1);
         box-shadow: 8px 9px 21px 0px rgba(62, 66, 66, 0.1);
+        // transition: 0.2s ease-out;
         .big_box {
           display: flex;
           flex-direction: column;
@@ -320,15 +385,15 @@ export default {
     .otheritem {
       position: relative;
       padding: 0 20px;
-      height: 80px;
+      height: 76px;
       text-align: center;
-      line-height: 80px;
+      line-height: 76px;
       background-color: #fcf1ef;
       border-radius: 20px;
       font-family: "Arial Normal", "Arial", sans-serif;
       font-weight: 400;
       font-style: normal;
-      font-size: 24px;
+      font-size: 17px;
       border: 1px solid #d7d7d7;
       box-sizing: border-box;
     }
@@ -342,5 +407,9 @@ export default {
   .flip-list-move {
     transition: transform 0.3s;
   }
+}
+
+::v-deep .search input.el-input__inner {
+  border-radius: 15px !important;
 }
 </style>

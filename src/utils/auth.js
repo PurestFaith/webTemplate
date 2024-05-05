@@ -11,13 +11,3 @@ export const setToken = (token) => {
 export const removeToken = () => {
   localStorage.removeItem(TokenKey);
 };
-
-// 长token
-const rereshToken = "rereshToken";
-export const setRefreshToken = (refreshToken) => {
-  localStorage.setItem(rereshToken, refreshToken);
-};
-
-export const getRefreshToken = () => {
-  localStorage.getItem(rereshToken);
-};

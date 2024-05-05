@@ -18,7 +18,7 @@
             </el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input v-model="loginForm.password" placeholder="请输入密码" type="password" autocomplete="off">
+            <el-input v-model="loginForm.password" placeholder="请输入密码" type="password" autocomplete="off" @keyup.enter.native="login">
               <span slot="prefix">
                 <img src="@/style/icons/lock.png" />
               </span>
@@ -30,7 +30,7 @@
         </el-form>
       </div>
       <div class="btn">
-        <el-button @click="login" type="success">{{ $t("login.btn") }}</el-button>
+        <el-button @click.native.prevent="login" type="success" :loading="loading">{{ $t("login.btn") }}</el-button>
       </div>
     </div>
   </div>
@@ -78,32 +78,31 @@ export default {
   },
 
   methods: {
-    ...mapActions(["handleLogin"]),
-
+    ...mapActions("user", ["handleLogin"]),
     login() {
-      const that = this;
-      that.$refs.loginForm.validate((valid) => {
+      this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          that.loading = true;
-          if (that.checked) {
-            let password = window.btoa(that.loginForm.password); // 加密
-            localStorage.setItem("username", that.loginForm.username);
+          this.loading = true;
+          if (this.checked) {
+            let password = window.btoa(this.loginForm.password); // 加密
+            localStorage.setItem("username", this.loginForm.username);
             localStorage.setItem("password", password);
           } else {
             localStorage.removeItem("username");
             localStorage.removeItem("password");
           }
-          that
-            .handleLogin(that.loginForm)
+          this.handleLogin(this.loginForm)
             .then(() => {
-              that.$router.push({
+              this.$router.push({
                 path: "/",
               });
-              that.loading = false;
+              this.loading = false;
             })
             .catch(() => {
-              that.loading = false;
+              this.loading = false;
             });
+        } else {
+          return false;
         }
       });
     },
@@ -130,8 +129,9 @@ export default {
     flex-direction: column;
     justify-content: space-evenly;
     padding-top: 30px;
-    background-color: rgba(214, 214, 214, 0.623);
-    box-shadow: 22px 22px 44px #c9c9c9, -22px -22px 44px #ffffff;
+    // background-color: rgba(214, 214, 214, 0.623);
+    background-color: #fff;
+    // box-shadow: 22px 22px 44px #c9c9c9, -22px -22px 44px #ffffff;
 
     .logo {
       width: 120px;

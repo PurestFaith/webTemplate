@@ -11,13 +11,13 @@
         <el-input v-model="formLabelAlign.confirm_password" size="small"></el-input>
       </el-form-item>
     </el-form>
-    <el-button @click="savePassword" type="success">{{ $t("modify.savePassword") }}</el-button
+    <el-button v-debounce:500="savePassword" type="success">{{ $t("modify.savePassword") }}</el-button
     ><el-button @click="handleReset('formLabelAlign')" style="margin-left: 30px; color: blue" type="text">{{ $t("modify.resetPassword") }}</el-button>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { own } from "@/api/modify.js";
 export default {
   name: "modify",
@@ -47,10 +47,12 @@ export default {
 
     return {
       formLabelAlign: {
+        nickname: "",
         oldPassword: "",
         password: "",
         confirm_password: "",
       },
+      confirm_password: "",
       ruleCustom: {
         oldPassword: [{ validator: validatePass, trigger: "blur" }],
         password: [{ validator: validatePassCheck, trigger: "blur" }],
@@ -60,22 +62,27 @@ export default {
   },
   computed: {
     // 后续在Getters里面集中取用户信息
-    ...mapGetters(["username"]),
+    ...mapGetters(["nickname"]),
   },
 
   methods: {
+    ...mapActions("user", ["handleLogOut"]),
     async savePassword() {
-      const vm = this;
-      vm.$refs.formLabelAlign.validate(async (valid) => {
+      this.$refs.formLabelAlign.validate(async (valid) => {
         if (valid) {
           const { status, data } = await own({
-            oldPassword: vm.formLabelAlign.oldPassword,
-            password: vm.formLabelAlign.password,
+            nickname: this.nickname,
+            oldPassword: this.formLabelAlign.oldPassword,
+            password: this.formLabelAlign.password,
           });
           if (status === 200) {
-            vm.$message.success(data.msg);
+            this.$message.success(data.msg);
+            this.handleLogOut();
+            this.$router.push({
+              path: "/login",
+            });
           } else {
-            vm.$message.error(data.msg);
+            this.$message.error(data.msg);
           }
         }
       });

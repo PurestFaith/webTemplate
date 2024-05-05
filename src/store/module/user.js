@@ -1,6 +1,7 @@
 import { login } from "@/api/userInfo";
 import { setToken } from "@/utils/auth";
 export default {
+  namespaced: true,
   state: {
     userInfo: {},
     token: null,
@@ -13,13 +14,21 @@ export default {
       state.token = token;
       setToken(token);
     },
+
+    clearMSG(state) {
+      state.userInfo = {};
+      state.token = null;
+      localStorage.clear();
+    },
   },
   actions: {
     // 登录
     async handleLogin({ commit }, payload) {
       const res = await login(payload);
-      commit("setUserInfo", res.data.data);
-      commit("setToken", res.data.data.apiAuth);
+      if (res.data.code === 1) {
+        commit("setUserInfo", res.data.data);
+        commit("setToken", res.data.data.apiAuth);
+      }
     },
 
     // 获取用户相关信息
@@ -29,6 +38,7 @@ export default {
     handleLogOut({ commit }) {
       commit("setToken", "");
       commit("setUserInfo", {});
+      commit("sx_system/setTreeData", [], { root: true });
     },
   },
 };

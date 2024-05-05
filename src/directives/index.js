@@ -18,9 +18,7 @@ export const debounce = {
   },
 };
 
-/**
- * 当图片出现损坏时，使用默认图片展示
- */
+//当图片出现损坏时，使用默认图片展示
 export const errorimg = {
   // 在当前的dom元素插入到节点之后执行
   inserted(el, options) {

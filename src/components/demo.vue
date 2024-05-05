@@ -1,28 +1,66 @@
 <template>
   <div>
-    <button @click.stop="showBox">点击展示隐藏盒子</button>
-    <div ref="box" v-show="flag">要隐藏的盒子</div>
+    <el-tree ref="treeRef" :data="data" show-checkbox check-strictly node-key="id" default-expand-all draggable @check="handlercurrent">
+      <span class="custom-tree-node" slot-scope="{ node, data }">
+        <span>{{ data.name }}</span>
+        <span>
+          <el-button type="text" size="mini" @click="() => append(data)">
+            <!-- <div style="width: 20px; height: 20px; background-color: yellowgreen">+</div> -->
+          </el-button>
+        </span>
+      </span>
+    </el-tree>
   </div>
 </template>
+
 <script>
 export default {
+  name: "tree",
   data() {
     return {
-      flag: false,
+      data: [
+        {
+          id: 3,
+          name: "三车间",
+          level: 1,
+        },
+        {
+          id: 4,
+          name: "四车间",
+          level: 1,
+        },
+        {
+          id: 5,
+          name: "五车间",
+          level: 1,
+          children: [
+            {
+              id: 51,
+              name: "五车间A",
+              level: 2,
+            },
+            {
+              id: 53,
+              name: "五车间C",
+              level: 2,
+            },
+          ],
+        },
+      ],
     };
   },
-  mounted() {
-    document.addEventListener("click", this.hideBox);
-  },
   methods: {
-    hideBox(e) {
-      //判断是否点击的是盒子之外
-      if (!this.$refs.box.contains(e.target)) {
-        this.flag = false;
+    handlercurrent(data, list) {
+      if (data.level === 1) {
+        this.$refs.treeRef.setCheckedKeys([data.id]);
+      } else if (data.level === 2) {
+        list.checkedNodes.forEach((element) => {
+          if (element.level === 1) {
+            //取消当前选中节点
+            this.$refs.treeRef.setCheckedKeys([data.id]);
+          }
+        });
       }
-    },
-    showBox() {
-      this.flag = !this.flag;
     },
   },
 };

@@ -7,7 +7,7 @@
           <div class="top">
             <img src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif" alt="" srcset="" />
           </div>
-          <div class="bottom">张三</div>
+          <div class="bottom">{{ userInfo.nickname }}</div>
         </div>
       </div>
       <div class="msg">
@@ -29,6 +29,7 @@
 <script>
 import basicInformation from "@/components/basicInformation.vue"; //基本信息
 import modify from "@/components/modify.vue"; //修改密码
+import { mapGetters } from "vuex";
 export default {
   name: "personalCenter",
   components: {
@@ -53,6 +54,9 @@ export default {
     window.onresize = () => {
       this.calcTableHeight();
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"]),
   },
   methods: {
     calcTableHeight() {

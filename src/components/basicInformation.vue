@@ -3,39 +3,39 @@
     <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign" class="form">
       <div class="left">
         <el-form-item :label="$t('basicInformation.JobNumber')">
-          <el-input v-model="formLabelAlign.perno" size="small" disabled></el-input>
+          <el-input v-model="formLabelAlign.username" size="small" disabled></el-input>
         </el-form-item>
         <el-form-item :label="$t('basicInformation.gender')">
           <el-input v-model="forMapSex" size="small" disabled></el-input>
         </el-form-item>
         <el-form-item :label="$t('basicInformation.department')">
-          <el-input v-model="formLabelAlign.groupname" size="small" disabled></el-input>
+          <el-input v-model="formLabelAlign.department_name" size="small" disabled></el-input>
         </el-form-item>
         <el-form-item :label="$t('basicInformation.Position')">
-          <el-input v-model="formLabelAlign.post" size="small" disabled></el-input>
+          <el-input v-model="formLabelAlign.jobtitlename" size="small" disabled></el-input>
         </el-form-item>
         <el-form-item :label="$t('basicInformation.mobile')">
-          <el-input v-model="formLabelAlign.tel" size="small" disabled></el-input>
+          <el-input v-model="formLabelAlign.mobile" size="small" disabled></el-input>
         </el-form-item>
         <el-form-item :label="$t('basicInformation.RegistrationTime')">
-          <el-input v-model="formLabelAlign.start_date" size="small" disabled></el-input>
+          <el-input v-model="formLabelAlign.create_time" size="small" disabled></el-input>
         </el-form-item>
       </div>
       <div class="right">
         <el-form-item :label="$t('basicInformation.name')">
-          <el-input v-model="formLabelAlign.pername" size="small" disabled></el-input>
+          <el-input v-model="formLabelAlign.nickname" size="small" disabled></el-input>
         </el-form-item>
         <el-form-item :label="$t('basicInformation.AffiliatedCenter')">
-          <el-input v-model="formLabelAlign.center" size="small" disabled></el-input>
+          <el-input v-model="formLabelAlign.department_name_parent" size="small" disabled></el-input>
         </el-form-item>
         <el-form-item :label="$t('basicInformation.post')">
-          <el-input v-model="formLabelAlign.professionalPositions" size="small" disabled></el-input>
+          <el-input v-model="formLabelAlign.jobactivityname" size="small" disabled></el-input>
         </el-form-item>
         <el-form-item :label="$t('basicInformation.OfficeLocation')">
-          <el-input v-model="formLabelAlign.address" size="small" disabled></el-input>
+          <el-input v-model="formLabelAlign.locationname" size="small" disabled></el-input>
         </el-form-item>
         <el-form-item :label="$t('basicInformation.E_mail')">
-          <el-input v-model="formLabelAlign.mail" size="small" disabled></el-input>
+          <el-input v-model="formLabelAlign.email" size="small" disabled></el-input>
         </el-form-item>
       </div>
     </el-form>
@@ -44,46 +44,48 @@
 
 <script>
 import axios from "axios";
+import { mapGetters } from "vuex";
 export default {
   name: "basicInformation",
   data() {
     return {
-      perno: "23032502",
+      sex: "",
       labelPosition: "top",
       formLabelAlign: {
-        perno: "",
+        username: "",
         pername: "",
         sex: "",
         groupname: "",
-        post: "",
-        tel: "",
-        start_date: "",
+        jobtitlename: "",
+        mobile: "",
+        create_time: "",
         region: "",
-        center: "",
-        professionalPositions: "",
-        address: "",
-        mail: "",
+        department_name_parent: "",
+        jobactivityname: "",
+        locationname: "",
+        email: "",
       },
     };
   },
   computed: {
+    ...mapGetters(["username", "userInfo"]),
     forMapSex() {
-      return this.formLabelAlign.sex === "0" ? "男" : "女";
+      return this.sex == 0 ? "男" : "女";
     },
   },
 
-  created() {
-    this.get_employee_info();
-  },
-  methods: {
-    async get_employee_info() {
-      axios({
-        url: "http://192.168.1.148:9095/app/index.php/Admin/common/get_employee_info",
-        params: { perno: this.perno },
-      }).then((res) => {
-        this.formLabelAlign = { ...res.data };
-      });
-    },
+  mounted() {
+    this.formLabelAlign.username = this.userInfo.username;
+    this.formLabelAlign.nickname = this.userInfo.nickname;
+    this.sex = this.userInfo.sex;
+    this.formLabelAlign.department_name_parent = this.userInfo.department_name_parent;
+    this.formLabelAlign.department_name = this.userInfo.department_name;
+    this.formLabelAlign.jobactivityname = this.userInfo.jobactivityname;
+    this.formLabelAlign.jobtitlename = this.userInfo.jobtitlename;
+    this.formLabelAlign.locationname = this.userInfo.locationname;
+    this.formLabelAlign.mobile = this.userInfo.mobile;
+    this.formLabelAlign.email = this.userInfo.email;
+    this.formLabelAlign.create_time = this.userInfo.create_time;
   },
 };
 </script>
