@@ -23,18 +23,40 @@
     background-color: #f5f7fa;
   }
   table {
-    width: 100%;
+    min-width: 100%;
+    .index {
+      width: 60px !important;
+    }
+    .name {
+      width: 120px;
+    }
   }
 }
 </style>
+
+<script>
+export default {
+  name: "qualityManagementReport",
+  data() {
+    return {};
+  },
+  methods: {},
+  mounted() {
+    const td = document.querySelectorAll("table tbody tr > td:nth-child(1)");
+    td.forEach((v) => {
+      v.style.color = "#b92d5d";
+    });
+  },
+};
+</script>
 
 <template>
   <div class="qualityManagementReport">
     <table>
       <tbody>
         <tr>
-          <th rowspan="2">序号</th>
-          <th>质控部长</th>
+          <th class="index" rowspan="2">序号</th>
+          <th class="name">质控部长</th>
           <th colspan="4">质控部合计( 次 )</th>
           <th></th>
           <th></th>
@@ -322,7 +344,7 @@
           <td></td>
           <td></td>
         </tr>
-         <tr>
+        <tr>
           <td>9</td>
           <td>IQC漏出(件)</td>
           <td></td>
@@ -393,13 +415,3 @@
     </FloatingBall>
   </div>
 </template>
-
-<script>
-export default {
-  name: "qualityManagementReport",
-  data() {
-    return {};
-  },
-  methods: {},
-};
-</script>

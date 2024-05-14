@@ -36,6 +36,12 @@
 }
 </style>
 
+<script>
+export default {
+  name: "settlementVoucher",
+};
+</script>
+
 <template>
   <div class="settlementVoucher">
     <table>
@@ -92,13 +98,3 @@
     </FloatingBall>
   </div>
 </template>
-
-<script>
-export default {
-  name: "settlementVoucher",
-  data() {
-    return {};
-  },
-  methods: {},
-};
-</script>

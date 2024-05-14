@@ -1,45 +1,3 @@
-<template>
-  <div class="HomeViewPage">
-    <customNav />
-    <div class="content">
-      <div class="logo">
-        <HomeLogo />
-      </div>
-
-      <div class="list">
-        <systemList @showmaskingFlag="showmaskingFlag" ref="systemList" />
-      </div>
-    </div>
-    <div class="masking" ref="masking" v-show="showmasking" @click="hideMask"></div>
-  </div>
-</template>
-
-<script>
-export default {
-  name: "layout",
-  components: {},
-  props: {},
-  data() {
-    return {
-      input: "",
-      list: [],
-      showmasking: false,
-      activeIndex: false,
-    };
-  },
-
-  methods: {
-    hideMask() {
-      this.showmasking = false;
-      this.$refs.systemList.activeIndex = null;
-    },
-    showmaskingFlag() {
-      this.showmasking = true;
-    },
-  },
-};
-</script>
-
 <style lang="scss" scoped>
 .masking {
   position: absolute;
@@ -49,6 +7,7 @@ export default {
   height: 100%;
   background-color: rgba(188, 188, 188, 0.637);
   backdrop-filter: blur(5px) saturate(180%);
+  -webkit-backdrop-filter: blur(5px);
   z-index: 99;
 }
 .content {
@@ -56,11 +15,12 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 0 120px;
   flex-wrap: wrap;
-
+  .logo {
+    margin-top: 20px;
+  }
   .search {
-    margin: 100px 0 30px 0;
+    margin: 100px 0 20px 0;
     .input {
       font-size: 16px;
       background-color: transparent;
@@ -107,3 +67,42 @@ export default {
   border-radius: 20px;
 }
 </style>
+
+<script>
+export default {
+  name: "layout",
+  data() {
+    return {
+      input: "",
+      list: [],
+      maskingSwitch: false,
+      activeIndex: false,
+    };
+  },
+
+  methods: {
+    hideMask() {
+      this.maskingSwitch = false;
+      this.$refs.systemList.activeIndex = null;
+    },
+    isMaskingFlag() {
+      this.maskingSwitch = true;
+    },
+  },
+};
+</script>
+
+<template>
+  <div class="HomeViewPage">
+    <customNav />
+    <div class="content">
+      <div class="logo">
+        <HomeLogo />
+      </div>
+      <div class="list">
+        <systemList @isMaskingFlag="isMaskingFlag" ref="systemList" />
+      </div>
+    </div>
+    <div class="masking" ref="masking" v-show="maskingSwitch" @click="hideMask"></div>
+  </div>
+</template>

@@ -13,7 +13,7 @@ export default {
     Vue.component("HomeLogo", HomeLogo); //公司logo
     Vue.component("basicInformation", basicInformation); //基本信息
     Vue.component("modify", modify); //修改密码
+    Vue.component("FloatingBall", FloatingBall); //悬浮球
     Vue.component("demo", demo);
-    Vue.component("FloatingBall", FloatingBall);
   },
 };

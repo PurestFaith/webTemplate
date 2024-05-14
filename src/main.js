@@ -20,6 +20,8 @@ Object.keys(directives).forEach((key) => {
 // 改变"en","zh"实现中英文切换
 i18n.locale = "zh";
 
+// import remjs from "./rem";
+
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
 Vue.use(components);

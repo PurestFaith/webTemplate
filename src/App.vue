@@ -1,19 +1,3 @@
-<template>
-  <div id="app">
-    <router-view :key="key" />
-  </div>
-</template>
-
-<script>
-export default {
-  name: "App",
-  computed: {
-    key() {
-      return this.$route.name ? this.$route.name + +new Date() : this.$route + +new Date();
-    },
-  },
-};
-</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -36,3 +20,20 @@ nav a.router-link-exact-active {
   color: #42b983;
 }
 </style>
+
+<script>
+export default {
+  name: "App",
+  computed: {
+    key() {
+      return this.$route.name ? this.$route.name + +new Date() : this.$route + +new Date();
+    },
+  },
+};
+</script>
+
+<template>
+  <div id="app">
+    <router-view :key="key" />
+  </div>
+</template>

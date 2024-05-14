@@ -1,20 +1,8 @@
-<template>
-  <div class="control">
-    <div class="chose" @click.stop="choseChejian">
-      <img src="@/assets/common/loudou.png" alt="" srcset="" />
-    </div>
-    <div class="back" @click="$router.go(-1)">
-      <img src="@/assets/common/back.png" alt="" srcset="" />
-    </div>
-    <div class="panel" v-show="flag">
-      <slot></slot>
-      <div class="bottom" @click="close">
-        <img src="@/assets/common/close.png" alt="" srcset="" />
-        关闭悬浮球
-      </div>
-    </div>
-  </div>
-</template>
+<style scoped lang="scss">
+.control {
+  z-index: 2;
+}
+</style>
 
 <script>
 export default {
@@ -48,7 +36,7 @@ export default {
           this.flag = false;
           if (!this.flag) {
             chose.classList.remove("active");
-            this.$emit("requestInterface");
+            // this.$emit("requestInterface");
           }
         }
       }
@@ -57,8 +45,20 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.control {
-  z-index: 2;
-}
-</style>
+<template>
+  <div class="control">
+    <div class="chose" @click.stop="choseChejian">
+      <img src="@/assets/common/loudou.png" alt="" srcset="" />
+    </div>
+    <div class="back" @click="$router.go(-1)">
+      <img src="@/assets/common/back.png" alt="" srcset="" />
+    </div>
+    <div class="panel" v-show="flag">
+      <slot></slot>
+      <div class="bottom" @click="close">
+        <img src="@/assets/common/close.png" alt="" srcset="" />
+        关闭悬浮球
+      </div>
+    </div>
+  </div>
+</template>

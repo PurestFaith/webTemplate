@@ -40,6 +40,11 @@ const routes = [
     component: () => import("@/views/sx_system.vue"),
   },
   {
+    path: "/productionDetails",
+    name: "productionDetails",
+    component: () => import("@/views/productionDetails.vue"),
+  },
+  {
     path: "/qualityManagementReport",
     name: "qualityManagementReport",
     component: () => import("@/components/qualityManagementReport.vue"),

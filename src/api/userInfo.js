@@ -11,3 +11,10 @@ export const login = (data) => {
     data,
   });
 };
+
+export const loginOA = (params) => {
+  return request({
+    url: `admin/Login/oa`,
+    params,
+  });
+};

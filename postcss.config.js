@@ -8,3 +8,12 @@ module.exports = {
     },
   },
 };
+
+// module.exports = {
+//   plugins: {
+//     "postcss-pxtorem": {
+//       rootValue: 10, // 基准值
+//       propList: ["*"], // 需要做转化处理的属性，如`hight`、`width`、`margin`等，`*`表示全部
+//     },
+//   },
+// };

@@ -32,3 +32,30 @@ function timeWeekFormat(times) {
   return dateStr;
 }
 export default timeWeekFormat;
+
+// 根据年月获取当月的天数
+export function mGetDate(year, month) {
+  var d = new Date(year, month, 0).getDate();
+  return d;
+}
+export function convertToyyyyMMdd(dateString) {
+  var years = String(dateString.getFullYear()).padStart(2, "0");
+  var month = String(dateString.getMonth() + 1).padStart(2, "0");
+
+  // const numberOfDaysInTheCurrentMonth = mGetDate(years, month);
+  const days = String(dateString.getDate()).padStart(2, "0");
+  const arr = [`${years}-01-01`, `${years}-${month}-${days}`];
+  return arr;
+}
+
+export function ChineseMonths(dateString) {
+  var years = String(dateString.getFullYear());
+  var month = String(dateString.getMonth() + 1);
+  const days = mGetDate(years, month);
+  const obj = {
+    years,
+    month,
+    days,
+  };
+  return obj;
+}

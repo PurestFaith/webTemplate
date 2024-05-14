@@ -12,3 +12,12 @@ export const own = (data) => {
     },
   });
 };
+
+// 重置密码
+export const updatePass = (data) => {
+  return request({
+    url: "admin/User/updatePass",
+    method: "post",
+    data,
+  });
+};

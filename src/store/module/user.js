@@ -10,6 +10,7 @@ export default {
     setUserInfo(state, userInfo) {
       state.userInfo = userInfo;
     },
+
     setToken(state, token) {
       state.token = token;
       setToken(token);
@@ -31,10 +32,7 @@ export default {
       }
     },
 
-    // 获取用户相关信息
-    getUserInfo() {},
-
-    // 退出登录
+    // 登出
     handleLogOut({ commit }) {
       commit("setToken", "");
       commit("setUserInfo", {});

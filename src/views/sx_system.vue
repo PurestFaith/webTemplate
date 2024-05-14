@@ -9,7 +9,7 @@
     position: relative;
   }
   .box {
-    // 遮罩用作 模拟点击iframe时，去请求车间清洁
+    // 遮罩用作 模拟点击iframe时，去请求车间
     position: absolute;
     top: 0;
     z-index: 2;
@@ -28,28 +28,8 @@
 }
 </style>
 
-<template>
-  <div class="sx_system">
-    <div class="box" @click="hideBox" v-show="boxFlag"></div>
-    <iframe :src="sxUrl" frameborder="0" width="100%" height="100%" id="iframe"></iframe>
-    <FloatingBall @showBox="showBox">
-      <div class="top-box">
-        <div class="tilte">选择车间</div>
-        <div class="tree">
-          <el-tree ref="treeRef" :data="data" show-checkbox check-strictly node-key="id" default-expand-all draggable @check="handlercurrent">
-            <span class="custom-tree-node" slot-scope="{ node, data }">
-              <span>{{ data.name }}</span>
-            </span>
-          </el-tree>
-        </div>
-      </div>
-    </FloatingBall>
-  </div>
-</template>
-
 <script>
 import { mapGetters } from "vuex";
-
 export default {
   name: "sx_system",
   data() {
@@ -58,15 +38,24 @@ export default {
       sxUrl: `${process.env.VUE_APP_SX_URL}?`,
       boxFlag: true,
       departCode: "",
+      dep_arr: [],
     };
   },
 
   computed: {
     ...mapGetters(["treeData"]),
   },
+
   created() {
     this.data = this.treeData;
+    const arr = JSON.parse(localStorage.getItem("dep_arr"));
+    if (arr) {
+      this.$nextTick(() => {
+        this.$refs.treeRef.setCheckedNodes(arr);
+      });
+    }
   },
+
   watch: {
     $route: {
       handler(to, from) {
@@ -77,34 +66,55 @@ export default {
   },
 
   methods: {
-    handlercurrent(data, list) {
-      if (data.level === 1) {
+    handlercurrent(data, checked) {
+      checked.checkedNodes.forEach((ele) => {
         this.$refs.treeRef.setCheckedKeys([data.id]);
-      } else if (data.level === 2) {
-        list.checkedNodes.forEach((element) => {
-          if (element.level === 1) {
-            this.$refs.treeRef.setCheckedKeys([data.id]); //取消当前选中节点
-          }
-        });
-      }
-      if (this.$route.params.id !== data.code) {
-        this.departCode = data.code; //获取当前点击节点的code
-      } else {
-        this.$refs.treeRef.setCheckedKeys([]);
+      });
+
+      if (data.code) {
+        let res = this.$refs.treeRef.getCheckedNodes();
+        if (res[0]) {
+          this.arr = res;
+          this.departCode = res[0].code;
+        } else {
+          this.$refs.treeRef.setCheckedKeys([]);
+        }
       }
     },
 
     hideBox() {
       this.boxFlag = false;
-      if (this.departCode) {
-        this.$router.push({
-          path: `/sx_system/${this.departCode}`,
-        });
-      }
     },
     showBox(flag) {
       this.boxFlag = flag;
     },
+
+    filterData() {
+      this.sxUrl = `${process.env.VUE_APP_SX_URL}?${this.departCode}`;
+    },
+  },
+  destroyed() {
+    localStorage.removeItem("dep_arr");
   },
 };
 </script>
+
+<template>
+  <div class="sx_system">
+    <div class="box" @click="hideBox" v-show="boxFlag"></div>
+    <iframe :src="sxUrl" frameborder="0" width="100%" height="100%" id="iframe"></iframe>
+    <FloatingBall @showBox="showBox">
+      <div class="top-box">
+        <div class="tilte">选择车间</div>
+        <div class="tree">
+          <el-tree ref="treeRef" :data="data" show-checkbox node-key="id" default-expand-all draggable @check="handlercurrent">
+            <span class="custom-tree-node" slot-scope="{ node, data }">
+              <span>{{ data.name }}</span>
+            </span>
+          </el-tree>
+        </div>
+      </div>
+      <el-button type="primary" @click="filterData" size="mini">查询</el-button>
+    </FloatingBall>
+  </div>
+</template>
