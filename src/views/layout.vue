@@ -19,31 +19,6 @@
   .logo {
     margin-top: 20px;
   }
-  .search {
-    margin: 100px 0 20px 0;
-    .input {
-      font-size: 16px;
-      background-color: transparent;
-      width: 610px;
-      border-radius: 20px;
-      border: #ccc;
-      &:focus {
-        outline: none;
-      }
-
-      img {
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-      }
-    }
-    ::v-deep .el-input__prefix {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding-left: 10px;
-    }
-  }
 }
 
 ::v-deep .el-input {
@@ -73,8 +48,6 @@ export default {
   name: "layout",
   data() {
     return {
-      input: "",
-      list: [],
       maskingSwitch: false,
       activeIndex: false,
     };

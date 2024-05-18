@@ -17,7 +17,7 @@ export default {
     close() {
       document.querySelector(".control").remove();
     },
-    choseChejian(e) {
+    choseChejian() {
       const chose = document.querySelector(".chose");
       chose.classList.add("active");
       this.flag = !this.flag;
@@ -29,9 +29,9 @@ export default {
     hideBox(e) {
       const control = document.querySelector(".control");
       if (control) {
-        //判断是否点击的是盒子之外
         const panel = document.querySelector(".panel");
         const chose = document.querySelector(".chose");
+        //判断是否点击的是盒子之外
         if (!panel.contains(e.target)) {
           this.flag = false;
           if (!this.flag) {

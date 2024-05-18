@@ -261,7 +261,7 @@ export default {
     return {
       list: [],
       draggingItem: null,
-      attributeParameter: {
+      modalBox: {
         funcld: "",
       },
       attribute: [],
@@ -273,10 +273,9 @@ export default {
         keywords: "",
         type: "2",
       },
-
-      newData: "", //正在移动的元素
+      moveing_item: "", //正在移动的元素
       dragging: null, // 当前拖动的元素索引
-      dragStartPosition: { x: 0, y: 0 }, // 拖动开始时的位置
+      dragStartPosition: { x: 0, y: 0 }, // 拖动开始时位置
       ismove: false,
     };
   },
@@ -304,67 +303,75 @@ export default {
       this.list = arr;
     },
 
-    //属性
-    async getApplyProperty() {
-      const { data } = await getApplyProperty(this.attributeParameter);
-      this.attribute = data.data;
-    },
-
-    // 功能
-    async getByApp() {
-      const {
-        data: { data },
-      } = await getByApp(this.attributeParameter);
-      this.func = data;
-    },
-
     async goSystem(item, key) {
       try {
-        console.log("Hello-->", item);
-        if (item.app_api) {
-          this.setTreeData(JSON.parse(item.app_api));
+        const { id, app_api } = item;
+        this.modalBox.appId = id;
+        this.app_attribute();
+        this.app_function();
+
+        // 储存树形部门
+        if (app_api) {
+          this.setTreeData(JSON.parse(app_api));
         }
-        this.attributeParameter.appId = item.id;
-        this.getApplyProperty();
-        this.getByApp();
-        // app_type 1 弹出遮罩 2跳转外部链接
-        switch (item.app_type) {
-          case 1:
-            this.activeIndex = key;
-            this.$emit("isMaskingFlag"); //打开遮罩
-            break;
-          case 99:
-            const { data } = await loginOA({ app_id: item.id });
-            if (data.code === 1) {
-              window.location.href = `${data.data.url}`;
-            }
-            break;
-          default:
-            window.location.href = `${JSON.parse(item.app_api_show).url}?Api-Auth=${this.token}&target_url=${JSON.parse(item.app_api_show).target_url}`;
-            break;
-        }
+
+        //对不同跳转做处理
+        this.jumpMethod(item, key);
       } catch (err) {
         console.warn(err);
       }
     },
 
-    // 属性
-    handleClickAttrib: Debounce(function (item) {
+    async app_attribute() {
+      const { data } = await getApplyProperty(this.modalBox);
+      this.attribute = data.data;
+    },
+    async app_function() {
+      const {
+        data: { data },
+      } = await getByApp(this.modalBox);
+      this.func = data;
+    },
+
+    async jumpMethod({ id, app_type, app_api_show }, key) {
+      switch (app_type) {
+        // 1 弹出遮罩
+        case 1:
+          this.activeIndex = key;
+          this.$emit("isMaskingFlag");
+          break;
+
+        //99 OA系统
+        case 99:
+          const { data } = await loginOA({ app_id: id });
+          if (data.code === 1) {
+            window.location.href = `${data.data.url}`;
+          }
+          break;
+
+        // 2 外部链接
+        default:
+          const appApiShow = JSON.parse(app_api_show);
+          window.location.href = `${appApiShow.url}?Api-Auth=${this.token}&target_url=${appApiShow.target_url}`;
+          break;
+      }
+    },
+
+    handleClickAttrib: Debounce(function ({ attrUrl, keyFunc }) {
       this.$router.push({
-        path: `${item.attrUrl}${item.keyFunc}`,
+        path: `${attrUrl}${keyFunc}`,
       });
     }, 500),
 
-    // 功能
-    handleClickFunc: Debounce(function (item) {
+    handleClickFunc: Debounce(function ({ funcUrl, appApi }) {
       // 如果是地址存在http字符，为外部链接
-      const hrefFlag = item.funcUrl.includes("http");
+      const hrefFlag = funcUrl.includes("http");
       if (hrefFlag) {
-        window.location.href = `${item.funcUrl}?Api-Auth=${this.token}&type=close_menu`;
+        window.location.href = `${funcUrl}?Api-Auth=${this.token}&type=close_menu`;
       } else {
-        this.setEerTreeData(JSON.parse(item.appApi));
+        this.setEerTreeData(JSON.parse(appApi));
         this.$router.push({
-          path: `${item.funcUrl}`,
+          path: `${funcUrl}`,
           query: {
             ApiAuth: this.token,
             type: "close_menu",
@@ -373,12 +380,10 @@ export default {
       }
     }, 500),
 
-    // 记录鼠标第一个拖拽的元素
     dragstart(item) {
       this.draggingItem = item;
     },
 
-    // 记录手指第一个拖拽的元素
     touchstart(index, event, item) {
       if (!this.ismove) {
         this.draggingItem = item;
@@ -388,18 +393,16 @@ export default {
       }
     },
 
-    // 记录鼠标拖动 过程中信息
     dragenter(item, e) {
-      this.newData = item;
+      this.moveing_item = item;
       this.ismove = true;
       e.preventDefault();
     },
 
-    //记录手指拖动 过程中的信息
-    async touchmove(event, item, index) {
+    async touchmove(e) {
       this.ismove = true;
       if (this.dragging === null) return;
-      const touch = event.touches[0];
+      const touch = e.touches[0];
       // 检查是否有元素被经过
       this.list.forEach(async (item, index) => {
         // 跳过当前拖动的元素
@@ -409,8 +412,8 @@ export default {
         const rect = element.getBoundingClientRect();
         // 检查触摸点是否在元素的边界框内
         if (touch.clientX >= rect.left && touch.clientX <= rect.right && touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
-          this.newData = item;
-          event.preventDefault();
+          this.moveing_item = item;
+          e.preventDefault();
         }
       });
     },
@@ -426,9 +429,9 @@ export default {
       */
       if (this.ismove) {
         this.dragging = null;
-        if (this.draggingItem !== this.newData) {
+        if (this.draggingItem !== this.moveing_item) {
           let oldIndex = this.list.indexOf(this.draggingItem);
-          let newIndex = this.list.indexOf(this.newData);
+          let newIndex = this.list.indexOf(this.moveing_item);
           let newItems = [...this.list];
           newItems.splice(oldIndex, 1);
           newItems.splice(newIndex, 0, this.draggingItem);
@@ -488,9 +491,9 @@ export default {
           <!-- 上遮罩 -->
           <div class="topItem" v-if="attribute.length > 0 && activeIndex == key">
             <div class="attr-list">
-              <div class="attr-item" v-for="item in attribute" :key="item.id">
-                <div class="number" @click.stop="handleClickAttrib(item)">{{ Number(item.keyFunc) }}</div>
-                <div class="title">{{ item.valueFunc }}</div>
+              <div class="attr-item" v-for="attr in attribute" :key="attr.id">
+                <div class="number" @click.stop="handleClickAttrib(attr)">{{ Number(attr.keyFunc) }}</div>
+                <div class="title">{{ attr.valueFunc }}</div>
               </div>
             </div>
           </div>
@@ -498,12 +501,12 @@ export default {
           <div class="bottomItem" v-if="func.length > 0 && activeIndex == key">
             <div class="big_box">
               <span class="tj">统计列表</span>
-              <div class="func-list" @click="handleClickFunc(ele)" v-for="ele in func" :key="ele.id">
+              <div class="func-list" @click="handleClickFunc(func)" v-for="func in func" :key="func.id">
                 <div class="func-item">
                   <div class="pic">
                     <img src="@/assets/common/bookmark.png" />
                   </div>
-                  <div class="title">{{ ele.funcName }}</div>
+                  <div class="title">{{ func.funcName }}</div>
                 </div>
               </div>
             </div>

@@ -38,21 +38,6 @@ import { own, updatePass } from "@/api/modify.js";
 export default {
   name: "modify",
   data() {
-    const validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入您的当前密码"));
-      } else {
-        callback();
-      }
-    };
-    const validatePassCheck = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入您的新密码"));
-      } else {
-        callback();
-      }
-    };
-
     const validatePassword = (rule, value, callback) => {
       if (value !== this.formLabelAlign.password) {
         callback(new Error("与新密码不一致"));
@@ -60,7 +45,6 @@ export default {
         callback();
       }
     };
-
     return {
       formLabelAlign: {
         nickname: "",
@@ -70,14 +54,13 @@ export default {
       },
       confirm_password: "",
       ruleCustom: {
-        oldPassword: [{ validator: validatePass, trigger: "blur" }],
-        password: [{ validator: validatePassCheck, trigger: "blur" }],
+        oldPassword: [{ required: true, message: "请输入您的当前密码", trigger: "blur" }],
+        password: [{ required: true, message: "请输入您的新密码", trigger: "blur" }],
         confirm_password: [{ validator: validatePassword, trigger: "blur" }],
       },
     };
   },
   computed: {
-    // 后续在Getters里面集中取用户信息
     ...mapGetters(["nickname"]),
   },
 

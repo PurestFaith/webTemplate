@@ -93,27 +93,14 @@ import { mapActions } from "vuex";
 export default {
   name: "login",
   data() {
-    const validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入您的工号"));
-      }
-      callback();
-    };
-    const validatePassCheck = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入您的密码"));
-      } else {
-        callback();
-      }
-    };
     return {
       loginForm: {
         username: "",
         password: "",
       },
       loginRules: {
-        username: [{ required: true, trigger: "blur", validator: validatePass }],
-        password: [{ required: true, trigger: "blur", validator: validatePassCheck }],
+        username: [{ required: true, message: "请输入您的工号", trigger: "blur" }],
+        password: [{ required: true, message: "请输入您的密码", trigger: "blur" }],
       },
       checked: false,
       loading: false,
@@ -124,7 +111,7 @@ export default {
     let username = localStorage.getItem("username");
     if (username) {
       this.loginForm.username = localStorage.getItem("username");
-      this.loginForm.password = window.atob(localStorage.getItem("password")); // 解密
+      this.loginForm.password = window.atob(localStorage.getItem("password"));
       this.checked = true;
     }
   },
@@ -136,7 +123,7 @@ export default {
         if (valid) {
           this.loading = true;
           if (this.checked) {
-            let password = window.btoa(this.loginForm.password); // 加密
+            let password = window.btoa(this.loginForm.password);
             localStorage.setItem("username", this.loginForm.username);
             localStorage.setItem("password", password);
           } else {
@@ -164,7 +151,6 @@ export default {
 
 <template>
   <div class="loginPage">
-    
     <div class="box">
       <div class="logo">
         <img src="@/assets/common/logo.png" alt="" srcset="" />
