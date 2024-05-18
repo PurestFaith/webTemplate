@@ -56,7 +56,7 @@ const routes = [
   },
 
   {
-    path: "/demo/:id?",
+    path: "/demo",
     name: "demo",
     component: () => import("@/components/demo.vue"),
   },

@@ -17,6 +17,8 @@ import * as directives from "@/directives/index";
 Object.keys(directives).forEach((key) => {
   Vue.directive(key, directives[key]);
 });
+
+
 // 改变"en","zh"实现中英文切换
 i18n.locale = "zh";
 
@@ -25,6 +27,7 @@ i18n.locale = "zh";
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
 Vue.use(components);
+
 
 new Vue({
   i18n,

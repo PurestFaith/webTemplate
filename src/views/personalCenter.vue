@@ -181,7 +181,7 @@ export default {
   data() {
     return {
       comName: "basicInformation",
-      msg: "基本信息",
+      title: "基本信息",
       styleObject: {
         minHeight: "",
       },
@@ -205,14 +205,9 @@ export default {
       this.styleObject.minHeight = window.bodyHeight + "px";
     },
 
-    goBasicInformation() {
-      this.comName = "basicInformation";
-      this.msg = "基本信息";
-    },
-
-    goModify_page() {
-      this.comName = "modify";
-      this.msg = "修改密码";
+    change_tab(comName, title) {
+      this.comName = comName;
+      this.title = title;
     },
   },
 };
@@ -231,12 +226,12 @@ export default {
         </div>
       </div>
       <div class="msg">
-        <div class="item" :class="[msg === '基本信息' ? 'active' : '']" @click="goBasicInformation"><i class="el-icon-info" /> {{ $t("personalCenter.basicInformation") }}</div>
-        <div class="item" :class="[msg === '修改密码' ? 'active' : '']" @click="goModify_page"><i class="el-icon-s-help" /> {{ $t("personalCenter.changePassword") }}</div>
+        <div class="item" :class="[title === '基本信息' ? 'active' : '']" @click="change_tab('basicInformation', '基本信息')"><i class="el-icon-info" /> {{ $t("personalCenter.basicInformation") }}</div>
+        <div class="item" :class="[title === '修改密码' ? 'active' : '']" @click="change_tab('modify', '修改密码')"><i class="el-icon-s-help" /> {{ $t("personalCenter.changePassword") }}</div>
       </div>
     </div>
     <div class="right">
-      <div class="title">{{ msg === "修改密码" ? $t("personalCenter.changePassword") : $t("personalCenter.basicInformation") }}</div>
+      <div class="title">{{ title === "修改密码" ? $t("personalCenter.changePassword") : $t("personalCenter.basicInformation") }}</div>
       <div class="content">
         <KeepAlive include="modify">
           <component :is="comName"></component>

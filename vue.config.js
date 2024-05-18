@@ -1,5 +1,4 @@
 const { defineConfig } = require("@vue/cli-service");
-const name = "vueDemo"; // page title
 module.exports = defineConfig({
   transpileDependencies: true,
   lintOnSave: false,

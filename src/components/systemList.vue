@@ -254,7 +254,7 @@ import { getApplyProperty, getApplicationList, getByApp } from "@/api/applicatio
 import { mapMutations, mapGetters } from "vuex";
 import { appPersonal } from "@/api/applicationList";
 import { loginOA } from "@/api/userInfo";
-
+import { Debounce } from "@/utils/Debounce_Throttle.js";
 export default {
   name: "systemList",
   data() {
@@ -320,6 +320,7 @@ export default {
 
     async goSystem(item, key) {
       try {
+        console.log("Hello-->", item);
         if (item.app_api) {
           this.setTreeData(JSON.parse(item.app_api));
         }
@@ -347,15 +348,15 @@ export default {
       }
     },
 
-    // 选择属性
-    handleClickAttrib(item) {
+    // 属性
+    handleClickAttrib: Debounce(function (item) {
       this.$router.push({
         path: `${item.attrUrl}${item.keyFunc}`,
       });
-    },
+    }, 500),
 
-    // 选择功能
-    handleClickFunc(item) {
+    // 功能
+    handleClickFunc: Debounce(function (item) {
       // 如果是地址存在http字符，为外部链接
       const hrefFlag = item.funcUrl.includes("http");
       if (hrefFlag) {
@@ -370,7 +371,7 @@ export default {
           },
         });
       }
-    },
+    }, 500),
 
     // 记录鼠标第一个拖拽的元素
     dragstart(item) {

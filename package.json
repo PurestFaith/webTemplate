@@ -1,6 +1,6 @@
 {
   "name": "central",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve --mode development",
@@ -30,6 +30,7 @@
   "devDependencies": {
     "@babel/core": "^7.23.9",
     "@babel/eslint-parser": "^7.23.10",
+    "@babel/plugin-transform-class-static-block": "^7.24.4",
     "@vue/cli-plugin-babel": "~5.0.8",
     "@vue/cli-plugin-eslint": "~5.0.8",
     "@vue/cli-plugin-router": "~5.0.8",

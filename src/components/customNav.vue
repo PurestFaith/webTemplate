@@ -47,7 +47,7 @@ import dayjs from "dayjs";
 import localeZhCn from "dayjs/locale/zh-cn";
 // 设置dayjs的中文语言环境
 dayjs.locale(localeZhCn);
-var timeHandle = null;
+
 export default {
   name: "customNav",
   data() {
@@ -56,18 +56,15 @@ export default {
     };
   },
   mounted() {
-    timeHandle = setInterval(() => {
+    let timeHandle = setInterval(() => {
       this.timer = dayjs().format("YYYY/MM/DD dddd HH:mm");
     }, 0);
-  },
-
-  destroyed() {
-    if (timeHandle) {
-      // 调用之前，先清理，防止一直生成对象
+    this.$once("hook:destroyed", () => {
       clearInterval(timeHandle);
       timeHandle = null;
-    }
+    });
   },
+
   computed: {
     ...mapGetters(["nickname"]),
   },

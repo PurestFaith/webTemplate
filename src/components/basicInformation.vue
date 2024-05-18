@@ -36,20 +36,18 @@ export default {
   data() {
     return {
       sex: "",
-      labelPosition: "top",
       formLabelAlign: {
         username: "",
-        pername: "",
+        nickname: "",
         sex: "",
-        groupname: "",
-        jobtitlename: "",
-        mobile: "",
-        create_time: "",
-        region: "",
         department_name_parent: "",
+        department_name: "",
         jobactivityname: "",
+        jobtitlename: "",
         locationname: "",
+        mobile: "",
         email: "",
+        create_time: "",
       },
     };
   },
@@ -62,24 +60,15 @@ export default {
   },
 
   mounted() {
-    this.formLabelAlign.username = this.userInfo.username;
-    this.formLabelAlign.nickname = this.userInfo.nickname;
+    this.formLabelAlign = { ...this.userInfo };
     this.sex = this.userInfo.sex;
-    this.formLabelAlign.department_name_parent = this.userInfo.department_name_parent;
-    this.formLabelAlign.department_name = this.userInfo.department_name;
-    this.formLabelAlign.jobactivityname = this.userInfo.jobactivityname;
-    this.formLabelAlign.jobtitlename = this.userInfo.jobtitlename;
-    this.formLabelAlign.locationname = this.userInfo.locationname;
-    this.formLabelAlign.mobile = this.userInfo.mobile;
-    this.formLabelAlign.email = this.userInfo.email;
-    this.formLabelAlign.create_time = this.userInfo.create_time;
   },
 };
 </script>
 
 <template>
   <div class="basicInformationPage">
-    <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign" class="form">
+    <el-form label-position="top" label-width="80px" :model="formLabelAlign" class="form">
       <div class="left">
         <el-row :gutter="50">
           <!-- 24就是一行沾满，12就是沾一半

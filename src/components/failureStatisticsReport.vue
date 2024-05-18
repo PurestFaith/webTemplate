@@ -206,6 +206,7 @@ export default {
   beforeRouteLeave(to, from, next) {
     if (to.name === "layout") {
       localStorage.removeItem("currentPageData");
+      localStorage.removeItem("TreeNodes");
     }
     next();
   },

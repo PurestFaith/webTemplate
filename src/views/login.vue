@@ -164,6 +164,7 @@ export default {
 
 <template>
   <div class="loginPage">
+    
     <div class="box">
       <div class="logo">
         <img src="@/assets/common/logo.png" alt="" srcset="" />
