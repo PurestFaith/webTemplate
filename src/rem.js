@@ -7,7 +7,6 @@
   let oHtml = document.getElementsByTagName("html")[0];
   oHtml.style.fontSize = fontSize + "px";
 
-  // 设置边界
   const boundary = () => {
     if (sw > 1920) {
       oHtml.style.fontSize = 13.33 + "px";
