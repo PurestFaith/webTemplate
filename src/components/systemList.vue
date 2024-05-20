@@ -1,5 +1,14 @@
 <style lang="scss" scoped>
 $boxLEFT: var(--left, 88px);
+// 模态框添加逐渐效果
+@keyframes modals {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .systemListPage {
   position: relative;
   display: flex;
@@ -108,6 +117,8 @@ $boxLEFT: var(--left, 88px);
           -webkit-box-shadow: 8px 9px 21px 0px rgba(62, 66, 66, 0.1);
           -moz-box-shadow: 8px 9px 21px 0px rgba(62, 66, 66, 0.1);
           box-shadow: 8px 9px 21px 0px rgba(62, 66, 66, 0.1);
+          animation-name: modals;
+          animation-duration: 0.7s;
 
           .attr-list {
             display: flex;
@@ -155,6 +166,8 @@ $boxLEFT: var(--left, 88px);
           -moz-box-shadow: 8px 9px 21px 0px rgba(62, 66, 66, 0.1);
           box-shadow: 8px 9px 21px 0px rgba(62, 66, 66, 0.1);
           // transition: 0.2s ease-out;
+          animation-name: modals;
+          animation-duration: 0.7s;
           .big_box {
             display: flex;
             flex-direction: column;

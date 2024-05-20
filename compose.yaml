@@ -1,0 +1,8 @@
+# 可以简写命令运行
+services:
+  control-center:
+    build: .
+    restart: unless-stopped
+    # network_mode: host
+    ports:
+      - 80:80
