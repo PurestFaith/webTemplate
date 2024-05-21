@@ -56,7 +56,7 @@ export default {
       ruleCustom: {
         oldPassword: [{ required: true, message: "请输入您的当前密码", trigger: "blur" }],
         password: [{ required: true, message: "请输入您的新密码", trigger: "blur" }],
-        confirm_password: [{ validator: validatePassword, trigger: "blur" }],
+        confirm_password: [{ required: true, validator: validatePassword, trigger: "blur" }],
       },
     };
   },
